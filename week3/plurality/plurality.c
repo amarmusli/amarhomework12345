@@ -1,24 +1,22 @@
+#include <cs50.h>
 #include <stdio.h>
 #include <string.h>
-#include <strings.h>
-#include <stdlib.h>
 
 #define MAX 9
-#define NAME_LENGTH 100
 
 typedef struct
 {
-    char *name;
+    string name;
     int votes;
 } candidate;
 
 candidate candidates[MAX];
 int candidate_count;
 
-int vote(char name[]);
+bool vote(string name);
 void print_winner(void);
 
-int main(int argc, char *argv[])
+int main(int argc, string argv[])
 {
     if (argc < 2)
     {
@@ -40,16 +38,11 @@ int main(int argc, char *argv[])
         candidates[i].votes = 0;
     }
 
-    int voter_count;
-    printf("Number of voters: ");
-    scanf("%d", &voter_count);
-
-    char name[NAME_LENGTH];
+    int voter_count = get_int("Number of voters: ");
 
     for (int i = 0; i < voter_count; i++)
     {
-        printf("Vote: ");
-        scanf("%s", name);
+        string name = get_string("Vote: ");
 
         if (!vote(name))
         {
@@ -58,20 +51,19 @@ int main(int argc, char *argv[])
     }
 
     print_winner();
-    return 0;
 }
 
-int vote(char name[])
+bool vote(string name)
 {
     for (int i = 0; i < candidate_count; i++)
     {
         if (strcasecmp(candidates[i].name, name) == 0)
         {
             candidates[i].votes++;
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 void print_winner(void)
